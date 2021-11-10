@@ -1,7 +1,9 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Hitbox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/prototype_textures/PNG/Orange/texture_01.png" type="Texture" id=3]
+[ext_resource path="res://src/levels/UI.gd" type="Script" id=5]
 
 [sub_resource type="ProceduralSky" id=1]
 
@@ -18,6 +20,8 @@ material = SubResource( 3 )
 
 [sub_resource type="ConvexPolygonShape" id=5]
 points = PoolVector3Array( -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, 1, 1, 1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1 )
+
+[sub_resource type="BoxShape" id=10]
 
 [sub_resource type="SphereMesh" id=6]
 
@@ -40,12 +44,10 @@ environment = SubResource( 2 )
 
 [node name="Boxes" type="Node" parent="."]
 
-[node name="RigidBody" type="RigidBody" parent="Boxes" groups=[
-"bodies",
-]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
-collision_layer = 8
-collision_mask = 15
+[node name="RigidBody" type="RigidBody" parent="Boxes" groups=["bodies"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3231, 3.15584, 5.24118 )
+collision_layer = 25
+collision_mask = 31
 continuous_cd = true
 sleeping = true
 
@@ -58,10 +60,16 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
 shape = SubResource( 5 )
 
-[node name="RigidBody2" type="RigidBody" parent="Boxes" groups=[
-"bodies",
-]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+[node name="Hitbox" parent="Boxes/RigidBody" instance=ExtResource( 2 )]
+transform = Transform( 1.13641, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+collision_mask = 17
+
+[node name="CollisionShape" parent="Boxes/RigidBody/Hitbox" index="0"]
+transform = Transform( 0.910292, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.405596, 0 )
+shape = SubResource( 10 )
+
+[node name="RigidBody2" type="RigidBody" parent="Boxes" groups=["bodies"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.64475, 4, 0 )
 collision_layer = 8
 collision_mask = 15
 continuous_cd = true
@@ -76,16 +84,16 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
 shape = SubResource( 5 )
 
-[node name="RigidBody3" type="RigidBody" parent="Boxes" groups=[
-"bodies",
-]]
+[node name="RigidBody3" type="RigidBody" parent="Boxes" groups=["bodies"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4701, 5.17074, 15.9671 )
-collision_layer = 8
-collision_mask = 15
+collision_layer = 25
+collision_mask = 31
 continuous_cd = true
+contact_monitor = true
 
 [node name="MeshInstance" type="MeshInstance" parent="Boxes/RigidBody3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
+layers = 17
 mesh = SubResource( 6 )
 material/0 = null
 
@@ -93,9 +101,7 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
 shape = SubResource( 5 )
 
-[node name="RigidBody4" type="RigidBody" parent="Boxes" groups=[
-"bodies",
-]]
+[node name="RigidBody4" type="RigidBody" parent="Boxes" groups=["bodies"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.41626, 6.26957, -3 )
 collision_layer = 8
 collision_mask = 15
@@ -113,6 +119,8 @@ shape = SubResource( 5 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 0.999956, 0, -0.00935483, 0, 1, 0, 0.00935483, 0, 0.999956, -5.25342, 5.87793, -2.76719 )
+collision_layer = 31
+collision_mask = 31
 
 [node name="Floor" type="Spatial" parent="."]
 
@@ -127,3 +135,52 @@ shape = SubResource( 7 )
 transform = Transform( 6, 0, 0, 0, -0.5, 0, 0, 0, 2.5, 0, 0, 0 )
 mesh = SubResource( 8 )
 material/0 = SubResource( 9 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+use_collision = true
+
+[node name="CSGPolygon" type="CSGPolygon" parent="CSGCombiner"]
+polygon = PoolVector2Array( -6, 0, 15.8063, 9.93955, 1, 0 )
+depth = 11.0
+
+[node name="UI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Death" type="Label" parent="UI"]
+margin_right = 116.0
+margin_bottom = 38.0
+text = "Death count :"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeathCount" type="Label" parent="UI"]
+margin_left = 96.2752
+margin_right = 136.275
+margin_bottom = 14.0
+text = "3"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time" type="Label" parent="UI"]
+margin_left = 1021.27
+margin_top = 1.88776
+margin_right = 1061.27
+margin_bottom = 15.8878
+text = "Time"
+
+[node name="TimeValue" type="Label" parent="UI"]
+margin_left = 1064.69
+margin_right = 1104.69
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[editable path="Boxes/RigidBody/Hitbox"]

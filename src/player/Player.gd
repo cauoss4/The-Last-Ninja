@@ -12,7 +12,7 @@ export var rot_speed = 5
 export(NodePath) onready var animationtree
 onready var _anim_tree = get_node(animationtree)
 export (int, 0, 10) var push = 1
-
+export var is_dead = false
 var velocity = Vector3.ZERO
 var snap_vector = Vector3.ZERO
 
@@ -56,6 +56,8 @@ func _physics_process(delta):
 	
 	
 func get_input_vector():
+	if is_dead:
+		return
 	var input_vector = Vector3.ZERO
 	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	input_vector.z = Input.get_action_strength("move_back") - Input.get_action_strength("move_forward")
@@ -64,11 +66,15 @@ func get_input_vector():
 	
 	
 func get_direction(input_vector):
+	if is_dead:
+		return
 	var direction = (input_vector.x * transform.basis.x) + (input_vector.z * transform.basis.z)
 	return direction
 
 	
 func apply_movement(input_vector, direction, delta):
+	if is_dead:
+		return
 	if direction != Vector3.ZERO:
 		velocity.x = velocity.move_toward(direction * max_speed, acceleration * delta).x
 		velocity.z = velocity.move_toward(direction * max_speed, acceleration * delta).z
@@ -78,6 +84,8 @@ func apply_movement(input_vector, direction, delta):
 	else:
 		_anim_tree["parameters/playback"].travel("standing")
 func apply_friction(direction, delta):
+	if is_dead:
+		return
 	if direction == Vector3.ZERO:
 		if is_on_floor():
 			velocity = velocity.move_toward(Vector3.ZERO, friction * delta)
@@ -87,6 +95,7 @@ func apply_friction(direction, delta):
 		
 func apply_gravity(delta):
 	velocity.y += gravity * delta
+	
 	velocity.y = clamp(velocity.y, gravity, jump_impulse)
 	
 	
@@ -95,6 +104,8 @@ func update_snap_vector():
 	
 	
 func jump():
+	if is_dead:
+		return
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		_anim_tree["parameters/playback"].travel("Jumping")
 		snap_vector = Vector3.ZERO
@@ -118,6 +129,13 @@ func apply_controller_rotation():
 		spring_arm.rotate_x(deg2rad(-axis_vector.y) * controller_sensitivity)
 		
 
+	
 
 
 
+func _on_Hurtbox_hurt():
+	
+	is_dead =true
+	Vector3.ZERO
+	_anim_tree["parameters/playback"].travel("death")
+	

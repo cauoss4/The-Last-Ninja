@@ -1,11 +1,11 @@
 extends KinematicBody
 
-export var max_speed = 10
-export var acceleration = 70
-export var friction = 60
+export var max_speed = 4
+export var acceleration = 50
+export var friction = 50
 export var air_friction = 10
-export var gravity = -40
-export var jump_impulse = 15
+export var gravity = -13
+export var jump_impulse = 8
 export var mouse_sensitivity = .1
 export var controller_sensitivity = 3
 export var rot_speed = 5
@@ -15,7 +15,7 @@ export (int, 0, 10) var push = 1
 export var is_dead = false
 var velocity = Vector3.ZERO
 var snap_vector = Vector3.ZERO
-
+var input_vector = Vector3.ZERO
 onready var spring_arm = $SpringArm
 onready var pivot = $Pivot
 
@@ -58,7 +58,7 @@ func _physics_process(delta):
 func get_input_vector():
 	if is_dead:
 		return
-	var input_vector = Vector3.ZERO
+	
 	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	input_vector.z = Input.get_action_strength("move_back") - Input.get_action_strength("move_forward")
 	
@@ -76,13 +76,26 @@ func apply_movement(input_vector, direction, delta):
 	if is_dead:
 		return
 	if direction != Vector3.ZERO:
+		
+		
+		
 		velocity.x = velocity.move_toward(direction * max_speed, acceleration * delta).x
 		velocity.z = velocity.move_toward(direction * max_speed, acceleration * delta).z
 #		pivot.look_at(global_transform.origin + direction, Vector3.UP)
 		pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(-input_vector.x, -input_vector.z), rot_speed * delta)
-		_anim_tree["parameters/playback"].travel("Running")
-	else:
-		_anim_tree["parameters/playback"].travel("standing")
+	if is_on_floor():	
+		if 	velocity.x > 0 or velocity.z > 0 or velocity.x < 0 or velocity.z < 0:
+			_anim_tree["parameters/playback"].travel("Running")
+		
+		else:
+			_anim_tree["parameters/playback"].travel("standing")
+	else :
+		velocity.y > 0 
+		_anim_tree["parameters/playback"].travel("Jumping")
+		velocity.x <2
+		velocity.z <2
+		
+		
 func apply_friction(direction, delta):
 	if is_dead:
 		return
@@ -97,8 +110,13 @@ func apply_gravity(delta):
 	velocity.y += gravity * delta
 	
 	velocity.y = clamp(velocity.y, gravity, jump_impulse)
-	
-	
+
+		
+		
+		
+			
+
+			
 func update_snap_vector():
 	snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
 	
@@ -107,7 +125,8 @@ func jump():
 	if is_dead:
 		return
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		_anim_tree["parameters/playback"].travel("Jumping")
+		
+	
 		snap_vector = Vector3.ZERO
 		velocity.y = jump_impulse
 		
@@ -137,5 +156,9 @@ func _on_Hurtbox_hurt():
 	
 	is_dead =true
 	Vector3.ZERO
-	_anim_tree["parameters/playback"].travel("death")
-	
+	#_anim_tree["parameters/playback"].travel("death")
+	get_tree().reload_current_scene()
+
+
+
+

@@ -8,20 +8,49 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "ResourceFormatLoader",
+"class": "HTerrainDataLoader",
+"language": "GDScript",
+"path": "res://addons/zylann.hterrain/hterrain_resource_loader.gd"
+}, {
+"base": "ResourceFormatSaver",
+"class": "HTerrainDataSaver",
+"language": "GDScript",
+"path": "res://addons/zylann.hterrain/hterrain_resource_saver.gd"
+} ]
+_global_script_class_icons={
+"HTerrainDataLoader": "",
+"HTerrainDataSaver": ""
+}
+
 [application]
 
 config/name="last ninja"
-run/main_scene="res://mainmenu.tscn"
+run/main_scene="res://src/levels/game.tscn"
 config/icon="res://ninjia.png"
 
 [autoload]
 
 Globals="*res://Globals.gd"
 
+[debug]
+
+settings/fps/force_fps=60
+
 [display]
 
 window/size/width=1920
 window/size/height=1080
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/waterways/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
+
+[global]
+
+la=false
+lay=false
 
 [input]
 
@@ -93,6 +122,7 @@ look_left={
 3d_physics/layer_3="world"
 3d_physics/layer_4="objects"
 3d_physics/layer_5="PlayerHurtbox"
+3d_physics/layer_6="change"
 
 [physics]
 

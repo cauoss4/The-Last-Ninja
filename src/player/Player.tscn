@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://src/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Animations/standing.tres" type="Animation" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Animations/Running.tres" type="Animation" id=5]
 [ext_resource path="res://Animations/death.tres" type="Animation" id=6]
 [ext_resource path="res://Hurtbox.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Animations/falling.tres" type="Animation" id=8]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Ch24Mesh"
@@ -24,7 +25,7 @@ surfaces/0 = {
 "vertex_count": 13560
 }
 
-[sub_resource type="AnimationNodeAnimation" id=17]
+[sub_resource type="AnimationNodeAnimation" id=30]
 animation = "Jumping"
 
 [sub_resource type="AnimationNodeAnimation" id=13]
@@ -42,42 +43,35 @@ xfade_time = 0.2
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 xfade_time = 0.2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=18]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=19]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=20]
-xfade_time = 0.5
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=21]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=23]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=24]
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=26]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=27]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+xfade_time = 0.15
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+xfade_time = 0.15
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=35]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachine" id=9]
-states/Jumping/node = SubResource( 17 )
-states/Jumping/position = Vector2( 545, 272 )
+states/Jumping/node = SubResource( 30 )
+states/Jumping/position = Vector2( 592.667, 201.76 )
 states/Running/node = SubResource( 13 )
 states/Running/position = Vector2( 163, 50 )
 states/death/node = SubResource( 22 )
 states/death/position = Vector2( 568, 106 )
 states/standing/node = SubResource( 14 )
 states/standing/position = Vector2( 1069, 42 )
-transitions = [ "Running", "standing", SubResource( 15 ), "standing", "Running", SubResource( 16 ), "Running", "Jumping", SubResource( 18 ), "standing", "Jumping", SubResource( 19 ), "Jumping", "standing", SubResource( 20 ), "Jumping", "Running", SubResource( 21 ), "Jumping", "death", SubResource( 23 ), "death", "Jumping", SubResource( 24 ), "Running", "death", SubResource( 25 ), "death", "Running", SubResource( 26 ), "standing", "death", SubResource( 27 ), "death", "standing", SubResource( 28 ) ]
+transitions = [ "Running", "standing", SubResource( 15 ), "standing", "Running", SubResource( 16 ), "Running", "death", SubResource( 25 ), "standing", "death", SubResource( 27 ), "standing", "Jumping", SubResource( 32 ), "Jumping", "standing", SubResource( 33 ), "Jumping", "Running", SubResource( 34 ), "Running", "Jumping", SubResource( 35 ), "Jumping", "death", SubResource( 36 ) ]
 start_node = "standing"
-graph_offset = Vector2( 354.84, 0 )
+graph_offset = Vector2( -39.3329, 6.76001 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 
@@ -96,7 +90,7 @@ animationtree = NodePath("AnimationTree")
 [node name="Pivot" type="Position3D" parent="."]
 
 [node name="Skeleton" type="Skeleton" parent="Pivot"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+transform = Transform( -1, 0, -8.75443e-08, 0, 1, 0, 8.75443e-08, 0, -1, 0, 0, 0 )
 bones/0/name = "mixamorig_Hips"
 bones/0/parent = -1
 bones/0/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.61e-06, 0.934075, 0.0221315 )
@@ -447,10 +441,11 @@ root_node = NodePath("../Pivot")
 anims/Jumping = ExtResource( 3 )
 anims/Running = ExtResource( 5 )
 anims/death = ExtResource( 6 )
+anims/falling = ExtResource( 8 )
 anims/standing = ExtResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, -2.22045e-16, 0, -3.83156e-08, -0.87656, 0, 1, -4.37115e-08, -0.052, 0.98, 0 )
+transform = Transform( 1, 0, -2.77556e-16, 0, -3.83156e-08, -0.87656, 0, 1, -4.37115e-08, -0.052, 0.98, 0 )
 shape = SubResource( 12 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 7 )]

@@ -62,7 +62,7 @@ xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachine" id=9]
 states/Jumping/node = SubResource( 30 )
-states/Jumping/position = Vector2( 592.667, 201.76 )
+states/Jumping/position = Vector2( 575.667, 223.76 )
 states/Running/node = SubResource( 13 )
 states/Running/position = Vector2( 163, 50 )
 states/death/node = SubResource( 22 )
@@ -71,7 +71,7 @@ states/standing/node = SubResource( 14 )
 states/standing/position = Vector2( 1069, 42 )
 transitions = [ "Running", "standing", SubResource( 15 ), "standing", "Running", SubResource( 16 ), "Running", "death", SubResource( 25 ), "standing", "death", SubResource( 27 ), "standing", "Jumping", SubResource( 32 ), "Jumping", "standing", SubResource( 33 ), "Jumping", "Running", SubResource( 34 ), "Running", "Jumping", SubResource( 35 ), "Jumping", "death", SubResource( 36 ) ]
 start_node = "standing"
-graph_offset = Vector2( -39.3329, 6.76001 )
+graph_offset = Vector2( 82.1745, 6.76001 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 

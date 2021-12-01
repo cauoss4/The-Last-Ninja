@@ -156,7 +156,9 @@ func _on_Hurtbox_hurt():
 	
 	is_dead =true
 	Vector3.ZERO
-	#_anim_tree["parameters/playback"].travel("death")
+	_anim_tree["parameters/playback"].travel("death")
+	
+	yield(get_tree().create_timer(3.5), "timeout")
 	get_tree().reload_current_scene()
 
 
